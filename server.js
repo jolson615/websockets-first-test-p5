@@ -1,18 +1,34 @@
-var express = require('express')
-var app = express()
-var server = app.listen(3000)
-app.use(express.static('public'))
+// var express = require('express')
+// var app = express()
+// var server = app.listen(3000)
+// app.use(express.static('public'))
+//
+// console.log("server running")
+//
+// var socket = require('socket.io')
+//
+// var io = socket(server)
+//
+// io.sockets.on('connection', newConnection)
 
-console.log("server running")
+const express = require('express');
+const socketIO = require('socket.io');
+const path = require('path');
 
-var socket = require('socket.io')
+const PORT = process.env.PORT || 8080;
+const INDEX = path.join(__dirname, 'index.html');
 
-var io = socket(server)
+const server = express()
+  .use((req, res) => res.sendFile(INDEX) )
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
 
-io.sockets.on('connection', newConnection)
+const io = socketIO(server);
+
+io.on('connection', newConnection);
 
 function newConnection(socket) {
   console.log("new connection" + socket.id)
+  socket.on('disconnect', () => console.log('Client disconnected'));
 
   socket.on('mouse', mouseMsg)
 
