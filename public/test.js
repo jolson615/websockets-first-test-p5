@@ -5,6 +5,7 @@ function setup() {
   colorMode(HSB, 360, 100, 100)
   background(220, 0, 90)
   socket = io.connect('http://0.0.0.0:8080')
+  console.log(socket)
   socket.on('mouse', newDrawing)
   myColor = random(360)
 }
